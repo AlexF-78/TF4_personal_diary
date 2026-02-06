@@ -20,7 +20,7 @@
                 {# Тело карточки с содержимым формы #}
                 <div class="card-body">
                     {# Форма регистрации с методом POST #}
-                    <form method="post">
+                    <form method="post" autocomplete="off">
                         {% csrf_token %}
 
                         {# Динамический рендеринг полей формы Django #}
