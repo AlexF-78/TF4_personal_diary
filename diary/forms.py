@@ -20,7 +20,12 @@ class UserRegisterForm(UserCreationForm):
         required=True,
         label="Email",
         widget=forms.EmailInput(
-            attrs={"class": "form-control", "placeholder": "Введите ваш email"}
+            attrs={"class": "form-control",
+                   "placeholder": "Введите ваш email",
+                   "autocomplete": "email",
+                   "autocapitalize": "off",
+                   "autocorrect": "off",
+                   }
         ),
     )
 
@@ -32,6 +37,9 @@ class UserRegisterForm(UserCreationForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Придумайте имя пользователя",
+                    "autocomplete": "username",
+                    "autocapitalize": "off",
+                    "autocorrect": "off",
                 }
             ),
         }
@@ -40,10 +48,20 @@ class UserRegisterForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         # Добавляем классы Bootstrap к полям паролей
         self.fields["password1"].widget.attrs.update(
-            {"class": "form-control", "placeholder": "Придумайте пароль"}
+            {"class": "form-control",
+             "placeholder": "Придумайте пароль",
+             "autocomplete": "new-password",
+             "autocapitalize": "off",
+             "autocorrect": "off",
+             }
         )
         self.fields["password2"].widget.attrs.update(
-            {"class": "form-control", "placeholder": "Повторите пароль"}
+            {"class": "form-control",
+             "placeholder": "Повторите пароль",
+             "autocomplete": "new-password",
+             "autocapitalize": "off",
+             "autocorrect": "off",
+             }
         )
         # Добавляем help text
         self.fields["password1"].help_text = (
