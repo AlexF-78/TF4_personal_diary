@@ -53,7 +53,7 @@ MIDDLEWARE = [
 ]
 
 # Корневой URL конфигурации
-ROOT_URLCONF = "personal_diary.urls"
+ROOT_URLCONF = "config.urls"
 
 # Конфигурация шаблонов
 TEMPLATES = [
@@ -73,7 +73,7 @@ TEMPLATES = [
 ]
 
 # WSGI приложение
-WSGI_APPLICATION = "personal_diary.wsgi.application"
+WSGI_APPLICATION = "config.wsgi.application"
 
 
 # Конфигурация базы данных
