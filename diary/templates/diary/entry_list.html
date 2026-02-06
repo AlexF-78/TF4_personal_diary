@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Мой дневник{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- Заголовок и кнопка создания -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>
+                <i class="bi bi-journal-text"></i> Мои записи
+            </h1>
+            <a href="{% url 'diary:entry_create' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Новая запись
+            </a>
+        </div>
+        
+        <!-- Форма поиска -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="get" action="{% url 'diary:entry_list' %}" class="row g-3">
+                    <div class="col-md-10">
+                        <div class="mb-3">
+                            <label for="id_query" class="form-label">Поиск записей</label>
+                            <input type="text" name="query" class="form-control" id="id_query" 
+                                   placeholder="Введите текст для поиска..." 
+                                   value="{{ request.GET.query|default_if_none:'' }}">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-outline-primary w-100 mt-4">
+                            <i class="bi bi-search"></i> Найти
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Список записей -->
+        {% if entries %}
+            <div class="row">
+                {% for entry in entries %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{% url 'diary:entry_detail' entry.pk %}" class="text-decoration-none">
+                                        {{ entry.title|truncatechars:50 }}
+                                    </a>
+                                </h5>
+                                <p class="card-text text-muted">
+                                    <small>
+                                        <i class="bi bi-calendar"></i> 
+                                        {{ entry.created_at|date:"d.m.Y H:i" }}
+                                    </small>
+                                </p>
+                                <p class="card-text">
+                                    {{ entry.content|truncatechars:100 }}
+                                </p>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="{% url 'diary:entry_detail' entry.pk %}" 
+                                       class="btn btn-outline-primary">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{% url 'diary:entry_update' entry.pk %}" 
+                                       class="btn btn-outline-secondary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a href="{% url 'diary:entry_delete' entry.pk %}" 
+                                       class="btn btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Пагинация -->
+            {% if is_paginated %}
+                <nav aria-label="Навигация по страницам">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                                    Назад
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                                    Вперед
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <!-- Сообщение об отсутствии записей -->
+            <div class="alert alert-info">
+                <h4 class="alert-heading">
+                    <i class="bi bi-info-circle"></i> Записей пока нет
+                </h4>
+                <p>У вас пока нет записей в дневнике. Создайте первую запись!</p>
+                <hr>
+                <a href="{% url 'diary:entry_create' %}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Создать первую запись
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{# Шаблон страницы регистрации нового пользователя #}
+{# Наследует базовый шаблон base.html #}
+{% extends 'base.html' %}
+
+{# Заголовок страницы в браузере #}
+{% block title %}Регистрация - Личный дневник{% endblock %}
+
+{# Основной контент страницы #}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            {# Карточка с формой регистрации #}
+            <div class="card shadow">
+                {# Заголовок карточки #}
+                <div class="card-header bg-success text-white">
+                    <h2 class="text-center mb-0">Создать аккаунт</h2>
+                </div>
+
+                {# Тело карточки с содержимым формы #}
+                <div class="card-body">
+                    {# Форма регистрации с методом POST #}
+                    <form method="post" autocomplete="off">
+                        {% csrf_token %}
+
+                        {# Динамический рендеринг полей формы Django #}
+                        {# Цикл проходит через все поля формы, определенной в views.py #}
+                        {% for field in form %}
+                        <div class="mb-3">
+                            {# Метка (label) поля формы #}
+                            <label class="form-label">{{ field.label }}</label>
+                            {# Само поле ввода (input, select, textarea и т.д.) #}
+                            {{ field }}
+                            {% if field.help_text %}
+                            <div class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                            {# Блок для отображения ошибок валидации поля #}
+                            {% if field.errors %}
+                            <div class="alert alert-danger mt-1">
+                                {{ field.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        {# Контейнер для кнопки отправки формы #}
+                        <div class="d-grid gap-2">
+                            {# Основная кнопка отправки формы #}
+                            <button type="submit" class="btn btn-success btn-lg">
+                                Зарегистрироваться
+                            </button>
+                        </div>
+                    </form>
+
+                    {# Ссылка на страницу входа для уже зарегистрированных пользователей #}
+                    <div class="mt-4 text-center">
+                        <p>
+                            Уже есть аккаунт?
+                            <a href="{% url 'login' %}" class="text-decoration-none fw-bold">
+                                Войти
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

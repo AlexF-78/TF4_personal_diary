@@ -1,15 +1,25 @@
 [project]
 name = "personaldiary"
 version = "0.1.0"
-description = ""
-authors = [
-    {name = "алексей федулов",email = "fab-78@mail.ru"}
-]
-requires-python = ">=3.13"
+description = "Personal Diary Web Application"
+authors = [{name = "Алексей Федулов",email = "fab-78@mail.ru"}]
+readme = "README.md"
+
+requires-python = ">=3.12,<4.0"
 dependencies = [
+    "Django>=6.0,<7.0",
+    "psycopg2-binary>=2.9,<3.0",
+    "python-dotenv>=1.0,<2.0"
 ]
 
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[project.optional-dependencies]
+dev = [
+    "coverage>=7.13,<8.0",
+    "flake8>=7.3,<8.0",
+    "black>=26.1,<27.0"
+]
