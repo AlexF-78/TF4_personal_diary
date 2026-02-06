@@ -20,17 +20,22 @@ services:
   web:
     build: .
     command: >
-      sh -c "python manage.py migrate --noinput &&
-             python manage.py collectstatic --noinput &&
-             gunicorn --bind 0.0.0.0:8000 personal_diary.wsgi:application"
+        sh -c "python manage.py migrate --noinput &&
+           python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
     environment:
+      - DB_NAME=personal_diary
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
       - DATABASE_URL=postgres://postgres:postgres@db:5432/personal_diary
       - SECRET_KEY=${SECRET_KEY:-your-secret-key-here}
-      - DEBUG=${DEBUG:-False}
+      - DEBUG=True
+      - ALLOWED_HOSTS=localhost,0.0.0.0,127.0.0.1
     ports:
-      - "8000:8000"
+      - "8001:8000"
     depends_on:
       db:
         condition: service_healthy
